@@ -222,3 +222,94 @@ def test_stats_ok_true():
     r = client.get("/api/stats")
     assert r.status_code == 200
     assert r.json().get("ok") is True
+
+
+def test_profile_description_trimmed(tmp_path, monkeypatch):
+    db = tmp_path / "p4.db"
+    monkeypatch.setenv("SPECTRA_DB_PATH", str(db))
+    from backend.db import init_db, get_all_profiles
+    init_db()
+    r = client.post("/api/profiles/add", json={
+        "name": "ok2", "platform": "web", "url": "https://example.com/ok2", "description": "  hello  "
+    })
+    assert r.status_code == 200
+    rows = get_all_profiles()
+    assert any(row["description"] == "hello" for row in rows)
+
+
+def test_ui_index_contains_title():
+    r = client.get("/ui")
+    assert r.status_code == 200
+    assert "<title>Spectra-AIO</title>" in r.text
+
+
+def test_profile_add_missing_url_returns_422():
+    r = client.post("/api/profiles/add", json={
+        "name": "x", "platform": "p", "url": "", "description": ""
+    })
+    assert r.status_code == 422
+
+
+def test_network_status_no_check_has_config():
+    r = client.get("/api/network/status")
+    assert r.status_code == 200
+    d = r.json()
+    assert "config" in d
+    assert d.get("ok") is True
+
+
+def test_root_has_version():
+    r = client.get("/")
+    assert r.status_code == 200
+    assert "version" in r.json()
+
+
+def test_ui_page_served():
+    r = client.get("/ui")
+    assert r.status_code == 200
+    assert "Spectra-AIO" in r.text
+
+
+def test_stats_profiles_count_is_int():
+    r = client.get("/api/stats")
+    assert isinstance(r.json().get("profiles_count"), int)
+
+
+def test_network_status_check_false_by_default():
+    r = client.get("/api/network/status")
+    assert r.status_code == 200
+    assert "check" not in r.json()
+
+
+def test_profiles_endpoint_empty_or_list():
+    r = client.get("/api/profiles")
+    assert r.status_code == 200
+    assert isinstance(r.json(), list)
+
+
+def test_health_returns_object():
+    r = client.get("/health")
+    assert r.status_code == 200
+    assert isinstance(r.json(), dict)
+
+
+def test_root_status_key():
+    r = client.get("/")
+    assert r.status_code == 200
+    assert "status" in r.json()
+
+
+def test_ui_title_present():
+    r = client.get("/ui")
+    assert r.status_code == 200
+    assert "<title>" in r.text
+
+
+def test_stats_has_tor_key():
+    r = client.get("/api/stats")
+    assert "tor" in r.json()
+
+
+def test_network_status_has_config_key():
+    r = client.get("/api/network/status")
+    assert "config" in r.json()
