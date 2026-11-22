@@ -45,3 +45,18 @@ Moduły są ładowane dynamicznie z `backend/modules/`. Moduły wyłączone moż
 - Nie wystawiaj publicznie bez auth/reverse proxy.
 - Nie commituj `.env`, kluczy, baz lokalnych.
 - Wyniki OSINT traktuj jako heurystyczne - weryfikuj ręcznie.
+
+## CLI - przykłady
+```bash
+source .venv/bin/activate
+python cli.py status
+python cli.py recon chaturbate example_user
+python cli.py profiles list
+python cli.py profiles add --name "Test" --platform "x" --url "https://example.com"
+python cli.py server --host 127.0.0.1 --port 8000
+```
+
+## Rozwiązywanie problemów
+- **Brak połączenia przez proxy**: ustaw `SPECTRA_PROXY_MODE=direct` lub skonfiguruj `SPECTRA_TOR_PROXY`/`SPECTRA_PROXY_URL`.
+- **Puste/niepewne wyniki OSINT**: sprawdź `reason` w odpowiedzi; `UNKNOWN/BLOCKED` oznacza brak pewnej detekcji.
+- **Port zajęty**: zmień `SPECTRA_PORT` lub parametr `--port`.
