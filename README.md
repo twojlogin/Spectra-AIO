@@ -8,12 +8,13 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 
 ## Co zawiera
 
-- **FastAPI backend** (`backend/main_backend.py`) z dynamicznym ładowaniem modułów z `backend/modules/`
-- **Web UI** pod `/ui` (statyczny HTML/CSS/JS, bez React/MUI/builda)
-- **CLI** (`cli.py`) na `argparse` + `requests`
-- **SQLite** na profile (`backend/db.py`)
-- **Tor SOCKS5h** dla modułów sieciowych (konfigurowalne przez env)
-- **auto_full_recon.py** - CLI raportu przez API
+- **FastAPI backend** (`backend/main_backend.py`) - dynamiczne ładowanie modułów z `backend/modules/`, endpointy `/health`, `/api/stats`, `/api/network/status`, profile i recon.
+- **Web UI** pod `/ui` - statyczny HTML/CSS/JS, bez React/MUI/builda; motyw zależny od poziomu „nastroju”, panel statusu/proxy.
+- **CLI** (`cli.py`) na `argparse` + `requests` oraz `auto_full_recon.py` do raportu przez API.
+- **SQLite** na profile (`backend/db.py`), lokalny plik DB poza gitem.
+- **Proxy**: `SPECTRA_PROXY_MODE=tor|direct|custom` + obsługa SOCKS5h/URL proxy; tryb `direct` bez Tora.
+- **Skrypty**: `scripts/bootstrap.*` (wykrycie OS/Pythona, venv, deps, szybki check) i `scripts/run.*`.
+- **Kontrola**: compileall + smoke import (sekcja poniżej).
 
 ## Lekkość / bezpieczeństwo
 
