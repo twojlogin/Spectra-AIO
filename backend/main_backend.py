@@ -195,7 +195,7 @@ def tor_status(request: Request, check: bool = Query(False)):
     except Exception as e:
         logger.warning("Network check failed (%s): %s", mode, e)
         result["ok"] = False
-        result["check"] = {"ok": False, "mode": mode, "error": "check_failed", "message": tor_unavailable_message(e)}
+        result["check"] = {"ok": False, "mode": mode, "error": "check_failed", "message": tor_unavailable_message()}
     return result
 
 

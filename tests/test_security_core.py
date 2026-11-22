@@ -68,3 +68,38 @@ def test_profiles_list_returns_array():
     r = client.get("/api/profiles")
     assert r.status_code == 200
     assert isinstance(r.json(), list)
+
+
+def test_legacy_profile_add_rejects_bad_url(tmp_path, monkeypatch):
+    db = tmp_path / "p2.db"
+    monkeypatch.setenv("SPECTRA_DB_PATH", str(db))
+    from backend.db import init_db
+    init_db()
+    r = client.post("/api/profiles/add_legacy", params={
+        "name": "n", "platform": "p", "url": "ftp://bad", "description": ""
+    })
+    assert r.status_code == 400
+
+
+def test_stats_has_required_keys():
+    r = client.get("/api/stats")
+    assert r.status_code == 200
+    data = r.json()
+    for k in ["ok", "version", "modules", "module_count", "profiles_count", "tor"]:
+        assert k in data
+
+
+def test_tor_mode_check_error_does_not_leak_secret(monkeypatch):
+    mb._network_check_last.clear()
+    monkeypatch.setattr(mb, "_NETWORK_CHECK_COOLDOWN_S", 0.0)
+    monkeypatch.setattr(mb, "tor_proxy_config", lambda: {"mode": "tor", "enabled": True, "proxy": "socks5h://127.0.0.1:9050", "timeout": 10, "user_agent": "ua"})
+
+    class BadSession:
+        def get(self, *args, **kwargs):
+            raise RuntimeError("SECRET_INTERNAL_DETAIL")
+
+    monkeypatch.setattr(mb, "get_tor_session", lambda timeout=10: BadSession())
+    r = client.get("/api/network/status?check=true")
+    data = r.json()
+    assert "SECRET_INTERNAL_DETAIL" not in str(data)
+    assert data["check"]["error"] == "check_failed"
