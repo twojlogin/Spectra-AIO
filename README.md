@@ -69,6 +69,13 @@ python cli.py server --host 127.0.0.1 --port 8000
 - Wyniki OSINT są heurystyczne (możliwe false positive/negative).
 - Nie wystawiaj backendu publicznie bez auth/reverse proxy.
 
+## Kontrola techniczna
+
+```bash
+python3 -m compileall -q backend cli.py auto_full_recon.py scripts/bootstrap.py
+PYTHONPATH=. .venv/bin/python -c "import backend.main_backend, cli, auto_full_recon; print('OK')"
+```
+
 ## Struktura
 
 ```text
