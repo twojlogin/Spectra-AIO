@@ -86,6 +86,7 @@ PYTHONPATH=. .venv/bin/python -m pytest -q
 Jeśli nie ma błędu i druga komenda wypisze `OK`, podstawy projektu działają. CI na GitHub Actions odpala compile, smoke import, pytest i `pip-audit`.
 
 > Uwaga: obecne testy są głównie smoke/regresyjne i nie dowodzą bezpieczeństwa ani poprawności modułów OSINT. Zielone testy nie oznaczają braku dziur. Liczba testów zmienia się - uruchom `pytest -q`, żeby zobaczyć aktualny stan.
+> Projekt jest kruchy i nie ma gwarancji przywracania funkcji, wsparcia ani kompletności.
 
 ## Struktura
 
