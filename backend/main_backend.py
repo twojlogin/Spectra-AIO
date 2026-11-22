@@ -178,7 +178,10 @@ def tor_status(request: Request, check: bool = Query(False)):
                 result["check"]["ip_info"] = r.json()
         except Exception as e:
             logger.warning("Direct network check failed: %s", e)
-            result["check"]["ip_error"] = "check_failed"
+            result["ok"] = False
+            result["check"]["ok"] = False
+            result["check"]["error"] = "check_failed"
+            result["check"]["message"] = "Sprawdzenie połączenia nie powiodło się."
         return result
 
     try:
