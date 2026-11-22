@@ -58,15 +58,13 @@ python cli.py server --host 127.0.0.1 --port 8000
 ## Konfiguracja (.env)
 
 - `SPECTRA_HOST`, `SPECTRA_PORT`
-- `SPECTRA_TOR_PROXY` (domyślnie `socks5h://127.0.0.1:9050`)
+- `SPECTRA_PROXY_MODE` (`tor`/`direct`/`custom`), `SPECTRA_TOR_PROXY`, `SPECTRA_PROXY_URL`
 - `SPECTRA_REQUEST_TIMEOUT`
 - `SPECTRA_CORS_ORIGINS`
-- `SPECTRA_NITTER_INSTANCES`
 - `SPECTRA_DB_PATH`, `SPECTRA_AVATARS_DIR`
 
 ## Ograniczenia
 
-- Nitter jest niestabilny (martwe instancje/rate-limit) - użyj `SPECTRA_NITTER_INSTANCES`.
 - Wayback ma limity i timeouty - moduł używa retry/backoff i limitów, ale wyniki mogą być niepełne.
 - Wyniki OSINT są heurystyczne (możliwe false positive/negative).
 - Nie wystawiaj backendu publicznie bez auth/reverse proxy.
