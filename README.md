@@ -5,6 +5,8 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 > Używaj tylko do legalnych, autoryzowanych badań bezpieczeństwa i analizy własnego śladu cyfrowego.
 
 > **Ostrzeżenie:** to wczesny, niekompletny projekt. Duża część funkcji jest ograniczona, wyłączona lub krucha. Nie traktuj tego jako gotowego narzędzia produkcyjnego ani wiarygodnego źródła wyników.
+> 
+> Na razie to bardziej warsztat niż gotowy produkt: trochę kodu, trochę eksperymentu i sporo rzeczy „do zrobienia kiedyś”. Powstaje w Polsce i czeka na właściwy moment, żeby urosnąć w coś sensownego. Testy są tu głównie po to, żeby CI miało co robić i żeby podstawowe rzeczy nie rozsypywały się po cichu - ale zielony pasek to nie certyfikat jakości.
 
 ## Co zawiera
 
