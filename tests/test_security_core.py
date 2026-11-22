@@ -139,3 +139,23 @@ def test_profile_add_rejects_data_url():
         "name": "x", "platform": "p", "url": "data:text/html,hi", "description": ""
     })
     assert r.status_code == 400
+
+
+def test_profile_add_rejects_file_url():
+    r = client.post("/api/profiles/add", json={
+        "name": "x", "platform": "p", "url": "file:///etc/passwd", "description": ""
+    })
+    assert r.status_code == 400
+
+
+def test_stats_modules_count_matches_list():
+    r = client.get("/api/stats")
+    data = r.json()
+    assert data["module_count"] == len(data["modules"])
+
+
+def test_network_status_config_has_mode():
+    r = client.get("/api/network/status")
+    data = r.json()
+    assert "config" in data
+    assert "mode" in data["config"]
