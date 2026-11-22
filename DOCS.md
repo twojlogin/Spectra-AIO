@@ -36,7 +36,7 @@ Domyślnie: `http://127.0.0.1:8000` (UI: `/ui`).
 - `GET /api/network/status` - konfiguracja sieci/proxy
 - `GET /api/profiles` - lista profili
 - `POST /api/profiles/add` - dodanie profilu (parametry: name, platform, url, description, metadata)
-- `GET /osint/check-user/{username}` - sprawdzenie loginu (Reddit, GitLab) z `status/reason`
+- `GET /osint/check-user/{username}` - dostępny tylko gdy włączony jest moduł `username_aggregator` w `backend/modules/`
 
 ## Moduły
 Moduły są ładowane dynamicznie z `backend/modules/`. Moduły wyłączone można trzymać w `backend/modules/_disabled/`.
@@ -50,7 +50,7 @@ Moduły są ładowane dynamicznie z `backend/modules/`. Moduły wyłączone moż
 ```bash
 source .venv/bin/activate
 python cli.py status
-python cli.py recon chaturbate example_user
+# python cli.py recon <site> <username>  # wymaga włączonych modułów OSINT
 python cli.py profiles list
 python cli.py profiles add --name "Test" --platform "x" --url "https://example.com"
 python cli.py server --host 127.0.0.1 --port 8000

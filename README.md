@@ -21,7 +21,7 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 - Brak ciężkiego frontendu (zero npm build, zero React/MUI).
 - Minimalne zależności Pythona: FastAPI, uvicorn, requests[socks], bs4, dotenv, aiofiles.
 - Domyślnie bind na `127.0.0.1`, CORS ograniczony przez env.
-- Podstawowe hardeningi: walidacja inputów, limity rozmiaru avatarów, SSRF guard na avatar URL, retry/backoff dla Wayback.
+- Podstawowe hardeningi w jądrze: walidacja inputów, bezpieczniejsze domyślne CORS/bind, limit/throttling checków sieciowych.
 
 ## Szybki start
 
