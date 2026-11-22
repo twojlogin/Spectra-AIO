@@ -4,6 +4,8 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 
 > Używaj tylko do legalnych, autoryzowanych badań bezpieczeństwa i analizy własnego śladu cyfrowego.
 
+> **Ostrzeżenie:** to wczesny, niekompletny projekt. Duża część funkcji jest ograniczona, wyłączona lub krucha. Nie traktuj tego jako gotowego narzędzia produkcyjnego ani wiarygodnego źródła wyników.
+
 ## Co zawiera
 
 - **FastAPI backend** (`backend/main_backend.py`) - dynamiczne ładowanie modułów z `backend/modules/`, endpointy `/health`, `/api/stats`, `/api/network/status`, profile i recon.
