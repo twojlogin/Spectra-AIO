@@ -53,8 +53,10 @@ def _status_from_response(resp, platform: dict, username: str) -> tuple[str, str
                 if data.get("error") == 404:
                     return "NOT_FOUND", "json_error_404"
                 return "UNKNOWN", f"json_error_{data.get('error')}"
-            if isinstance(data, dict) and str(data.get("message", "")).lower() == "not found":
+            if isinstance(data, dict) and str(data.get("message", "")).lower() in {"not found", "not found."}:
                 return "NOT_FOUND", "json_message_not_found"
+            if isinstance(data, dict) and str(data.get("detail", "")).lower() in {"not found", "not found."}:
+                return "NOT_FOUND", "json_detail_not_found"
             # Reddit-like: data.name
             if isinstance(data, dict) and "data" in data and isinstance(data["data"], dict):
                 if data["data"].get("name"):
