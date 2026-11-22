@@ -84,3 +84,13 @@ auto_full_recon.py
 setup.sh / setup.ps1
 run_backend.sh / run_backend.ps1
 ```
+
+## Historia kotkowa
+
+- 🐱 **Kot 1**: obudził się w repo i zobaczył bałagan po starych skryptach.
+- 🐱 **Kot 2**: przyniósł lekki UI, CLI i bootstrap, żeby wszystko dało się odpalić.
+- 🐱 **Kot 3**: wyrzucił ciężkie śmieci, ogarnął proxy `direct/tor/custom` i posprzątał ścieżki.
+- 🐱 **Kot 4**: dodał `reason` do sprawdzania loginów, żeby nie miauczeć „FOUND” bez dowodu.
+- 🐱 **Kot 5**: zmienił kolory pod nastrój, dodał pulsowanie i zostawił ślad łapki w README.
+
+> Napisane kotkowo przy udziale modelu AI Iceman Free (OpenCode).
