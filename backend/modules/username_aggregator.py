@@ -10,12 +10,6 @@ from backend.utils.tor_client import get_tor_session
 # Keep this small and honest. Better fewer reliable checks than many noisy ones.
 PLATFORMS = [
     {
-        "name": "GitHub",
-        "url": "https://api.github.com/users/{u}",
-        "json_found_any": ["login", "id"],
-        "json_not_found": [404, "404", "not found"],
-    },
-    {
         "name": "Reddit",
         "url": "https://www.reddit.com/user/{u}/about.json",
         "json_found_key": "name",
