@@ -92,6 +92,8 @@ Jeśli nie ma błędu i druga komenda wypisze `OK`, podstawy projektu działają
 > Uwaga: obecne testy są głównie smoke/regresyjne i nie dowodzą bezpieczeństwa ani poprawności modułów OSINT. Zielone testy nie oznaczają braku dziur. Liczba testów zmienia się - uruchom `pytest -q`, żeby zobaczyć aktualny stan.
 > Projekt jest kruchy i nie ma gwarancji przywracania funkcji, wsparcia ani kompletności.
 
+> Projekt powstawał iteracyjnie przez wiele godzin. Nadal jest wczesny i kruchy: część zmian wymagała poprawek, testy są głównie smoke/regresyjne i nie dowodzą bezpieczeństwa, a luki były znajdowane dopiero w trakcie.
+
 ## Struktura
 
 ```text
