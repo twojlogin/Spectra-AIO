@@ -11,9 +11,9 @@ from backend.utils.tor_client import get_tor_session
 PLATFORMS = [
     {
         "name": "GitHub",
-        "url": "https://github.com/{u}",
-        "not_found_markers": ["not found", "this is not the web page you are looking for"],
-        "found_markers": ["repositories", "followers", "following", "p-nickname"],
+        "url": "https://api.github.com/users/{u}",
+        "json_found_any": ["login", "id"],
+        "json_not_found": [404, "404", "not found"],
     },
     {
         "name": "Reddit",
@@ -47,8 +47,8 @@ def _status_from_response(resp, platform: dict, username: str) -> tuple[str, str
     if "/login" in url_l and code == 200:
         return "BLOCKED_OR_LOGIN", "redirected_to_login"
 
-    # JSON-specific (Reddit about.json)
-    if platform.get("json_found_key"):
+    # JSON-specific (Reddit about.json, GitHub API, etc.)
+    if platform.get("json_found_key") or platform.get("json_found_any"):
         ctype = (resp.headers.get("Content-Type") or "").lower()
         if "json" in ctype or body_l.lstrip().startswith("{"):
             try:
@@ -59,9 +59,18 @@ def _status_from_response(resp, platform: dict, username: str) -> tuple[str, str
                 if data.get("error") == 404:
                     return "NOT_FOUND", "json_error_404"
                 return "UNKNOWN", f"json_error_{data.get('error')}"
+            if isinstance(data, dict) and str(data.get("message", "")).lower() == "not found":
+                return "NOT_FOUND", "json_message_not_found"
+            # Reddit-like: data.name
             if isinstance(data, dict) and "data" in data and isinstance(data["data"], dict):
                 if data["data"].get("name"):
                     return "FOUND", "json_user_found"
+            # GitHub-like: top-level login/id
+            for k in platform.get("json_found_any", []):
+                if isinstance(data, dict) and data.get(k):
+                    return "FOUND", f"json_found:{k}"
+            if platform.get("json_found_key") and isinstance(data, dict) and data.get(platform["json_found_key"]):
+                return "FOUND", "json_user_found"
             return "UNKNOWN", "json_no_user_field"
         return "UNKNOWN", "expected_json"
 
