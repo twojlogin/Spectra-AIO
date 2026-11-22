@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+backend/env/
+ENV/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Runtime artifacts
+backend/profiles.db
+backend/profiles.db-*
+backend/test_profiles.db
+backend/test_profiles.db-*
+backend/avatars/
+backend/logs/
+REPORT_*.txt
+*.log
+
+# Node
+node_modules/
+
+# Tor runtime data
+/tor/

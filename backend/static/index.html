@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Spectra-AIO</title>
+  <link rel="stylesheet" href="/ui/static/style.css" />
+</head>
+<body>
+  <div class="bg"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">S</div>
+      <div>
+        <h1>Spectra-AIO</h1>
+        <p class="muted">Lokalny panel OSINT / recon</p>
+      </div>
+    </div>
+    <div class="status-wrap">
+      <span id="healthDot" class="dot dot-off"></span>
+      <span id="healthText" class="muted">Sprawdzanie...</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar card">
+      <button class="nav-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="nav-btn" data-tab="recon">Recon</button>
+      <button class="nav-btn" data-tab="profiles">Profile</button>
+      <button class="nav-btn" data-tab="network">Sieć / Proxy</button>
+      <button class="nav-btn" data-tab="modules">Moduły / API</button>
+      <div class="sidebar-note">
+        <strong>Zakres</strong>
+        <p>Używaj tylko na danych/celach, do których masz prawo i uprawnienie. Narzędzie lokalne, lekkie.</p>
+      </div>
+    </aside>
+
+    <section class="content">
+      <div id="tab-dashboard" class="tab active">
+        <div class="stats-grid">
+          <div class="card stat"><div class="stat-label">Status API</div><div id="statHealth" class="stat-value">-</div></div>
+          <div class="card stat"><div class="stat-label">Moduły</div><div id="statModules" class="stat-value">-</div></div>
+          <div class="card stat"><div class="stat-label">Profile w DB</div><div id="statProfiles" class="stat-value">-</div></div>
+          <div class="card stat"><div class="stat-label">UI</div><div class="stat-value small-value">/ui</div></div>
+        </div>
+        <div class="grid2">
+          <div class="card">
+            <div class="row between"><h2>Szybki start</h2></div>
+            <p class="muted small">Wpisz cel i odpal podstawowy flow. Wyniki pojawią się w panelu na dole.</p>
+            <label>Site/platform</label>
+            <input id="dashSite" value="chaturbate" placeholder="np. chaturbate" />
+            <label>Username/handle</label>
+            <input id="dashUsername" placeholder="np. example_user" />
+            <div class="row">
+              <button id="btnDashRecon" class="primary">Uruchom recon</button>
+              <button id="btnDashStatus">Odśwież status</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row between"><h2>Załadowane moduły</h2><button id="btnDashModules">Odśwież</button></div>
+            <div id="modulesList" class="modules-list muted">Ładowanie...</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-recon" class="tab">
+        <div class="grid2">
+          <div class="card">
+            <h2>Recon</h2>
+            <label>Site/platform</label>
+            <input id="site" value="chaturbate" placeholder="np. chaturbate" />
+            <label>Username/handle</label>
+            <input id="username" placeholder="np. example_user" />
+            <div class="row">
+              <button id="btnFullRecon" class="primary">Full recon</button>
+              <button id="btnCamMap">Cam map</button>
+              <button id="btnGhost">Ghost scan</button>
+            </div>
+            <div class="row">
+              <button id="btnSearch">Search</button>
+              <button id="btnOmni">Omni check</button>
+            </div>
+          </div>
+          <div class="card">
+            <h2>Narzędzia</h2>
+            <label>Email</label>
+            <input id="email" placeholder="user@example.com" />
+            <div class="row"><button id="btnEmail">Email recon</button></div>
+            <label>Avatar URL</label>
+            <input id="avatarUrl" placeholder="https://..." />
+            <div class="row"><button id="btnAvatar">Avatar check</button></div>
+            <label>Telegram channel</label>
+            <input id="tgChannel" placeholder="channel_name" />
+            <div class="row"><button id="btnTg">Telegram preview</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="tab-profiles" class="tab">
+        <div class="grid2">
+          <div class="card">
+            <h2>Dodaj profil</h2>
+            <label>Name</label><input id="pName" placeholder="name" />
+            <label>Platform</label><input id="pPlatform" placeholder="platform" />
+            <label>URL</label><input id="pUrl" placeholder="https://..." />
+            <label>Description</label><textarea id="pDesc" rows="3" placeholder="opis"></textarea>
+            <div class="row"><button id="btnAddProfile" class="primary">Zapisz profil</button></div>
+            <p id="profileMsg" class="muted small"></p>
+          </div>
+          <div class="card">
+            <div class="row between"><h2>Profile w bazie</h2><button id="btnRefreshProfiles">Odśwież</button></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>ID</th><th>Name</th><th>Platform</th><th>URL</th></tr></thead>
+                <tbody id="profilesBody"><tr><td colspan="4" class="muted">Brak danych</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="tab-network" class="tab">
+        <div class="grid2">
+          <div class="card">
+            <div class="row between"><h2>Sieć / Proxy</h2><button id="btnNetRefresh">Odśwież</button></div>
+            <p class="muted small">Sprawdź czy Tor/VPN/proxy działa i jakie IP widzi świat. Bez działającego proxy moduły sieciowe będą zwracać błąd.</p>
+            <div class="row">
+              <button id="btnNetCheck" class="primary">Sprawdź połączenie</button>
+            </div>
+            <pre id="netStatusBox" class="output" style="margin-top:12px;max-height:260px">Ładowanie...</pre>
+          </div>
+          <div class="card">
+            <h2>Opcje (konfiguracja .env)</h2>
+            <div class="muted small" style="line-height:1.6">
+              <p><strong>Tor (domyślnie):</strong> <code>SPECTRA_PROXY_MODE=tor</code>, <code>SPECTRA_TOR_PROXY=socks5h://127.0.0.1:9050</code></p>
+              <p><strong>Tor Browser:</strong> zwykle port <code>9150</code>.</p>
+              <p><strong>Custom proxy / VPN:</strong> <code>SPECTRA_PROXY_MODE=custom</code> + <code>SPECTRA_PROXY_URL=socks5h://host:port</code></p>
+              <p><strong>Bez proxy (mniej prywatne):</strong> <code>SPECTRA_PROXY_MODE=direct</code></p>
+              <hr style="border:0;border-top:1px solid #333;margin:10px 0">
+              <p><strong>Alternatywy:</strong> Proton VPN, Cloudflare WARP, lub dowolny lokalny SOCKS/HTTP proxy. Po zmianie .env zrestartuj backend.</p>
+              <p><strong>Tor download:</strong> https://www.torproject.org/download/</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="tab-modules" class="tab">
+        <div class="card">
+          <div class="row between"><h2>Status / moduły</h2><button id="btnRefreshStatus">Odśwież</button></div>
+          <pre id="statusBox" class="output">Ładowanie...</pre>
+        </div>
+      </div>
+
+      <div class="card output-card">
+        <div class="row between">
+          <h2>Wynik / log</h2>
+          <div class="row">
+            <button id="btnCopyOutput">Kopiuj</button>
+            <button id="btnExportOutput">Eksport JSON</button>
+            <button id="btnClearOutput">Wyczyść</button>
+          </div>
+        </div>
+        <pre id="output" class="output">Gotowy.</pre>
+      </div>
+    </section>
+  </main>
+
+  <script src="/ui/static/app.js"></script>
+</body>
+</html>

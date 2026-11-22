@@ -1,0 +1,8 @@
+# SpectraCam-AIO aliases (Portable Version)
+# Format: <alias>=<module path>
+# Sciezki sa relatywne do folderu glownego Spectra-AIO
+
+YouTube = ".\YouTube\venv\Scripts\Activate.ps1"
+Twitch = ".\Twitch\venv\Scripts\Activate.ps1"
+Telegram = ".\Telegram\venv\Scripts\Activate.ps1"
+Discord = ".\Discord\venv\Scripts\Activate.ps1"
