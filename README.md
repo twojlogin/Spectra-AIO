@@ -4,8 +4,6 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 
 > Używaj tylko do legalnych, autoryzowanych badań bezpieczeństwa i analizy własnego śladu cyfrowego.
 
-> 🐱 Kotki. Projekt rozwijany iteracyjnie w długiej sesji roboczej (ponad 10 godzin).
-
 ## Co zawiera
 
 - **FastAPI backend** (`backend/main_backend.py`) - dynamiczne ładowanie modułów z `backend/modules/`, endpointy `/health`, `/api/stats`, `/api/network/status`, profile i recon.
@@ -100,13 +98,3 @@ auto_full_recon.py
 DOCS.md
 SECURITY.md
 ```
-
-## Historia kotkowa
-
-- 🐱 **Kot 1**: obudził się w repo i zobaczył bałagan po starych skryptach.
-- 🐱 **Kot 2**: przyniósł lekki UI, CLI i bootstrap - wyglądało, że wszystko działa.
-- 🐱 **Kot 3**: posprzątał część śmieci i proxy, ale pod dywanem zostały dziury.
-- 🐱 **Kot 4**: dostał mleczko, ale miał nietolerancję laktozy - poprawki wyglądały lepiej, niż działały.
-- 🐱 **Kot 5**: dopiero po twardym sprzątaniu, wyłączeniu modułów i audycie jądro zaczęło wyglądać uczciwie.
-
-> Napisane kotkowo przy udziale modelu AI Iceman Free (OpenCode).
