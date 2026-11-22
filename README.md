@@ -9,7 +9,7 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 ## Co zawiera
 
 - **FastAPI backend** (`backend/main_backend.py`) - dynamiczne ładowanie modułów z `backend/modules/`, endpointy `/health`, `/api/stats`, `/api/network/status`, profile i recon.
-- **Web UI** pod `/ui` - statyczny HTML/CSS/JS, bez React/MUI/builda; motyw zależny od poziomu „nastroju”, panel statusu/proxy.
+- **Web UI** pod `/ui` - statyczny HTML/CSS/JS, bez React/MUI/builda; panel statusu/proxy.
 - **CLI** (`cli.py`) na `argparse` + `requests` oraz `auto_full_recon.py` do raportu przez API.
 - **SQLite** na profile (`backend/db.py`), lokalny plik DB poza gitem.
 - **Proxy**: `SPECTRA_PROXY_MODE=tor|direct|custom` + obsługa SOCKS5h/URL proxy; tryb `direct` bez Tora.
@@ -92,12 +92,13 @@ backend/
   db.py
   requirements.txt
   static/          # lekki web UI
-  modules/         # moduły OSINT
+  modules/         # aktywne moduły (obecnie puste), _disabled/ dla wyłączonych
   utils/
+scripts/           # bootstrap/run
 cli.py
 auto_full_recon.py
-setup.sh / setup.ps1
-run_backend.sh / run_backend.ps1
+DOCS.md
+SECURITY.md
 ```
 
 ## Historia kotkowa
