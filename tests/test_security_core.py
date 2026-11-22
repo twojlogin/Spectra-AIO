@@ -191,3 +191,21 @@ def test_network_status_check_ok_flag_false_on_rate_limit(monkeypatch):
     client.get("/api/network/status?check=true")
     r2 = client.get("/api/network/status?check=true")
     assert r2.json()["ok"] is False
+
+
+def test_legacy_profile_add_accepts_valid_url(tmp_path, monkeypatch):
+    db = tmp_path / "p3.db"
+    monkeypatch.setenv("SPECTRA_DB_PATH", str(db))
+    from backend.db import init_db
+    init_db()
+    r = client.post("/api/profiles/add_legacy", params={
+        "name": "ok", "platform": "web", "url": "https://example.com/ok", "description": "d"
+    })
+    assert r.status_code == 200
+    assert r.json().get("status") == "ok"
+
+
+def test_health_endpoint_ok():
+    r = client.get("/health")
+    assert r.status_code == 200
+    assert r.json().get("ok") is True
