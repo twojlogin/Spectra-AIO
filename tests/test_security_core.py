@@ -209,3 +209,16 @@ def test_health_endpoint_ok():
     r = client.get("/health")
     assert r.status_code == 200
     assert r.json().get("ok") is True
+
+
+def test_root_endpoint_reports_ui_path():
+    r = client.get("/")
+    assert r.status_code == 200
+    data = r.json()
+    assert data.get("ui") == "/ui"
+
+
+def test_stats_ok_true():
+    r = client.get("/api/stats")
+    assert r.status_code == 200
+    assert r.json().get("ok") is True
