@@ -7,10 +7,11 @@ import logging
 import os
 import re
 import sys
+import time
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -34,6 +35,10 @@ from backend.utils.tor_client import get_tor_session, tor_proxy_config, tor_unav
 
 logging.basicConfig(level=os.getenv("SPECTRA_LOG_LEVEL", "INFO").upper())
 logger = logging.getLogger("spectra")
+
+# Simple in-memory cooldown for network checks (per client IP)
+_NETWORK_CHECK_COOLDOWN_S = 10.0
+_network_check_last: dict[str, float] = {}
 
 
 def _parse_origins(value: str | None) -> list[str]:
@@ -149,11 +154,19 @@ def stats():
 
 @app.get("/api/tor/status")
 @app.get("/api/network/status")
-def tor_status(check: bool = Query(False)):
+def tor_status(request: Request, check: bool = Query(False)):
     cfg = tor_proxy_config()
     result = {"config": cfg, "ok": True}
     if not check:
         return result
+
+    client_ip = request.client.host if request.client else "unknown"
+    now = time.time()
+    last = _network_check_last.get(client_ip, 0.0)
+    if now - last < _NETWORK_CHECK_COOLDOWN_S:
+        retry_after = int(_NETWORK_CHECK_COOLDOWN_S - (now - last)) + 1
+        return {"config": cfg, "ok": False, "check": {"ok": False, "error": "rate_limited", "message": f"Poczekaj {retry_after}s przed kolejnym sprawdzeniem.", "retry_after_s": retry_after}}
+    _network_check_last[client_ip] = now
 
     mode = cfg.get("mode", "tor")
     if mode == "direct":
@@ -164,7 +177,8 @@ def tor_status(check: bool = Query(False)):
             if r.status_code == 200:
                 result["check"]["ip_info"] = r.json()
         except Exception as e:
-            result["check"]["ip_error"] = str(e)
+            logger.warning("Direct network check failed: %s", e)
+            result["check"]["ip_error"] = "check_failed"
         return result
 
     try:
@@ -176,8 +190,9 @@ def tor_status(check: bool = Query(False)):
         msg = "Połączenie przez Tor OK." if is_tor else "Połączenie przez proxy działa, ale Tor check zwraca IsTor=false (to może być zwykły VPN/custom proxy)."
         result["check"] = {"ok": True, "mode": mode, "ip_info": data, "is_tor": is_tor, "message": msg}
     except Exception as e:
+        logger.warning("Network check failed (%s): %s", mode, e)
         result["ok"] = False
-        result["check"] = {"ok": False, "mode": mode, "error": str(e), "message": tor_unavailable_message(e)}
+        result["check"] = {"ok": False, "mode": mode, "error": "check_failed", "message": tor_unavailable_message(e)}
     return result
 
 
