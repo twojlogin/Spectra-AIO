@@ -50,10 +50,10 @@ source .venv/bin/activate  # Linux
 
 python cli.py status
 python cli.py ui
-python cli.py recon chaturbate example_user
 python cli.py profiles list
 python cli.py profiles add --name "Test" --platform "x" --url "https://example.com"
 python cli.py server --host 127.0.0.1 --port 8000
+# python cli.py recon <site> <username>  # wymaga włączonych modułów OSINT w backend/modules/
 ```
 
 ## Konfiguracja (.env)
@@ -66,7 +66,7 @@ python cli.py server --host 127.0.0.1 --port 8000
 
 ## Ograniczenia
 
-- Wayback ma limity i timeouty - moduł używa retry/backoff i limitów, ale wyniki mogą być niepełne.
+- Moduły OSINT są obecnie wyłączone (`backend/modules/_disabled/`) - rdzeń działa, recon/moduły wymagają świadomego włączenia i weryfikacji.
 - Wyniki OSINT są heurystyczne (możliwe false positive/negative).
 - Nie wystawiaj backendu publicznie bez auth/reverse proxy.
 
