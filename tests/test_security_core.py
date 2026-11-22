@@ -159,3 +159,35 @@ def test_network_status_config_has_mode():
     data = r.json()
     assert "config" in data
     assert "mode" in data["config"]
+
+
+def test_profile_add_rejects_too_long_name():
+    r = client.post("/api/profiles/add", json={
+        "name": "a" * 500, "platform": "p", "url": "https://example.com", "description": ""
+    })
+    assert r.status_code == 422
+
+
+def test_ui_static_css_served():
+    r = client.get("/ui/static/style.css")
+    assert r.status_code == 200
+    assert "body" in r.text
+
+
+def test_network_status_check_ok_flag_false_on_rate_limit(monkeypatch):
+    mb._network_check_last.clear()
+    monkeypatch.setattr(mb, "_NETWORK_CHECK_COOLDOWN_S", 60.0)
+    monkeypatch.setattr(mb, "tor_proxy_config", lambda: {"mode": "direct", "enabled": False, "proxy": None, "timeout": 10, "user_agent": "ua"})
+
+    class OkSession:
+        def get(self, *args, **kwargs):
+            class R:
+                status_code = 200
+                def json(self):
+                    return {"ip": "1.2.3.4"}
+            return R()
+
+    monkeypatch.setattr(mb, "get_tor_session", lambda timeout=10: OkSession())
+    client.get("/api/network/status?check=true")
+    r2 = client.get("/api/network/status?check=true")
+    assert r2.json()["ok"] is False
