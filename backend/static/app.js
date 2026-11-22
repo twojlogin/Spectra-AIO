@@ -126,17 +126,13 @@
   async function refreshProfiles() {
     try {
       const rows = await api('/api/profiles');
-      const tbody = $('profilesBody');
-      tbody.textContent = '';
+      const box = $('profilesList');
+      if (!box) return;
       if (!Array.isArray(rows) || rows.length === 0) {
-        const tr = document.createElement('tr'); const td = document.createElement('td');
-        td.colSpan = 4; td.className = 'muted'; td.textContent = 'Brak profili'; tr.appendChild(td); tbody.appendChild(tr); return;
+        box.textContent = 'Brak profili';
+        return;
       }
-      for (const r of rows) {
-        const tr = document.createElement('tr');
-        [r.id, r.name, r.platform, r.url].forEach(v => { const td = document.createElement('td'); td.textContent = v == null ? '' : String(v); tr.appendChild(td); });
-        tbody.appendChild(tr);
-      }
+      box.textContent = rows.map(r => [r.id, r.name, r.platform, r.url].map(v => v == null ? '' : String(v)).join(' | ')).join('\n');
     } catch (e) { log('ERR profiles', e.message); }
   }
 
