@@ -69,12 +69,19 @@ python cli.py server --host 127.0.0.1 --port 8000
 - Wyniki OSINT są heurystyczne (możliwe false positive/negative).
 - Nie wystawiaj backendu publicznie bez auth/reverse proxy.
 
-## Kontrola techniczna
+## Szybka kontrola (czy wszystko działa)
+
+Uruchom te dwie komendy w katalogu projektu:
 
 ```bash
+# 1) Sprawdza, czy pliki Pythona nie mają błędów składni
 python3 -m compileall -q backend cli.py auto_full_recon.py scripts/bootstrap.py
+
+# 2) Sprawdza, czy główne pliki da się zaimportować
 PYTHONPATH=. .venv/bin/python -c "import backend.main_backend, cli, auto_full_recon; print('OK')"
 ```
+
+Jeśli nie ma błędu i druga komenda wypisze `OK`, podstawy projektu działają.
 
 ## Struktura
 
