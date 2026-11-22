@@ -187,21 +187,6 @@
   bindClick('btnAvatar', () => { const {site,username}=getTarget(false); const url=$('avatarUrl').value.trim(); if(!url) return log('ERR avatar','Podaj avatar URL'); runEndpoint('avatar', `/osint/avatar-check/${encodeURIComponent(site)}/${encodeURIComponent(username)}?avatar_url=${encodeURIComponent(url)}`); });
   bindClick('btnTg', () => { const ch=$('tgChannel').value.trim(); if(!ch) return log('ERR tg','Podaj kanał'); runEndpoint('telegram', `/osint/telegram/${encodeURIComponent(ch)}`); });
 
-  // rage theme
-  const rageSel = $('rageLevel');
-  const applyRage = (v) => { document.body.setAttribute('data-rage', String(v ?? '0')); };
-  const savedRage = localStorage.getItem('spectra_rage') || '0';
-  if (rageSel) { rageSel.value = savedRage; rageSel.addEventListener('change', () => { localStorage.setItem('spectra_rage', rageSel.value); applyRage(rageSel.value); }); }
-  applyRage(savedRage);
-
-  // opencode.ai easter egg
-  const checkOpencode = () => {
-    const vals = Array.from(document.querySelectorAll('input,textarea')).map(el => (el.value||'').toLowerCase());
-    const hit = vals.some(v => v.includes('opencode.ai'));
-    document.body.classList.toggle('opencode-pulse', hit);
-  };
-  document.addEventListener('input', (e) => { if (e.target && (e.target.matches('input,textarea'))) checkOpencode(); });
-
   refreshStatus();
   refreshProfiles();
 })();
