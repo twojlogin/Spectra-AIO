@@ -4,7 +4,7 @@ Lekki, lokalny toolkit OSINT/recon z backendem FastAPI, modułami, **CLI** i pro
 
 > Używaj tylko do legalnych, autoryzowanych badań bezpieczeństwa i analizy własnego śladu cyfrowego.
 
-> Napisane przez model AI Iceman Free (OpenCode). Projekt rozwijany iteracyjnie w długiej sesji roboczej (ponad 10 godzin).
+> 🐱 Kotki. Projekt rozwijany iteracyjnie w długiej sesji roboczej (ponad 10 godzin).
 
 ## Co zawiera
 
