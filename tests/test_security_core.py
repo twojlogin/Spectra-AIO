@@ -103,3 +103,39 @@ def test_tor_mode_check_error_does_not_leak_secret(monkeypatch):
     data = r.json()
     assert "SECRET_INTERNAL_DETAIL" not in str(data)
     assert data["check"]["error"] == "check_failed"
+
+
+def test_network_check_rate_limit_returns_retry_after(monkeypatch):
+    mb._network_check_last.clear()
+    monkeypatch.setattr(mb, "_NETWORK_CHECK_COOLDOWN_S", 60.0)
+    monkeypatch.setattr(mb, "tor_proxy_config", lambda: {"mode": "direct", "enabled": False, "proxy": None, "timeout": 10, "user_agent": "ua"})
+
+    class OkSession:
+        def get(self, *args, **kwargs):
+            class R:
+                status_code = 200
+                def json(self):
+                    return {"ip": "1.2.3.4"}
+            return R()
+
+    monkeypatch.setattr(mb, "get_tor_session", lambda timeout=10: OkSession())
+    assert client.get("/api/network/status?check=true").status_code == 200
+    r2 = client.get("/api/network/status?check=true")
+    data = r2.json()
+    assert data["check"]["error"] == "rate_limited"
+    assert isinstance(data["check"].get("retry_after_s"), int)
+    assert data["check"]["retry_after_s"] >= 1
+
+
+def test_profile_add_rejects_javascript_url():
+    r = client.post("/api/profiles/add", json={
+        "name": "x", "platform": "p", "url": "javascript:alert(1)", "description": ""
+    })
+    assert r.status_code == 400
+
+
+def test_profile_add_rejects_data_url():
+    r = client.post("/api/profiles/add", json={
+        "name": "x", "platform": "p", "url": "data:text/html,hi", "description": ""
+    })
+    assert r.status_code == 400
